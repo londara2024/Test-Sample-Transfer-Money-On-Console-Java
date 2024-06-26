@@ -1,7 +1,7 @@
-
+import java.awt.*;
 
 public class ServiceTransfer {
-    public static void transferOneToOne (String clientNameTSP, String clientNameTSR, Double money) {
+    public static void transferOneToOne (String clientNameTSP, String clientNameTSR, Double money) throws AWTException {
 
         Integer clientIndex1 = 0, clientIndex2 = 0;
         Boolean isCheck1 = false, isCheck2 = false;
@@ -35,21 +35,30 @@ public class ServiceTransfer {
             Double total = 0.0;
 
              Users postClient = RecodeClientPostMoney.users.get(clientIndex1);
-             total = postClient.getSaveMoney() - money;
-             postClient.setSaveMoney(total);
-
              Users getClient  = RecodeClientPostMoney.users.get(clientIndex2);
-             total = getClient.getSaveMoney() + money;
-             getClient.setSaveMoney(total);
+             if (getClient.getSaveMoney() > money && postClient.getSaveMoney() > money) {
+                 total = postClient.getSaveMoney() - money;
+                 postClient.setSaveMoney(total);
 
-             RecodeClientPostMoney.users.set(clientIndex1,postClient);
-             RecodeClientPostMoney.users.set(clientIndex2,getClient);
 
-             HistoryTransfer historyTransfer = new HistoryTransfer(postClient.getClientName(), getClient.getClientName(), money);
-             RecodeClientPostMoney.historyTransfers.add(historyTransfer);
+                 total = getClient.getSaveMoney() + money;
+                 getClient.setSaveMoney(total);
+
+                 RecodeClientPostMoney.users.set(clientIndex1,postClient);
+                 RecodeClientPostMoney.users.set(clientIndex2,getClient);
+
+                 HistoryTransfer historyTransfer = new HistoryTransfer(postClient.getClientName(), getClient.getClientName(), money);
+                 RecodeClientPostMoney.historyTransfers.add(historyTransfer);
+
+                 Common.displayTray(HeaderMsg.H_SUCCESS.toString(),HeaderMsg.H_SUCCESS.getMsg());
+             } else {
+                 System.err.println("Money is not enough. Please check money again.");
+                 Common.displayTray(HeaderMsg.H_ERROR.toString(),HeaderMsg.H_ERROR.getMsg());
+             }
 
         } else {
-            System.out.println("Invalid Post Client or Get Client. Please check client name again.");
+            System.err.println("Invalid Post Client or Get Client. Please check client name again.");
+            Common.displayTray(HeaderMsg.H_ERROR.toString(),HeaderMsg.H_ERROR.getMsg());
         }
 
     }

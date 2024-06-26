@@ -1,68 +1,91 @@
+import java.awt.*;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class Main {
 
-    public static void chooseMenu () {
+    public static void chooseMenu () throws AWTException {
         while (true) {
-            System.out.println("1. Create Client");
-            System.out.println("2. View Client");
-            System.out.println("3. Transfers Service");
-            System.out.println("4. History Transfer");
-            System.out.println("5. Exit");
+            System.out.println("\n\n========= :: Welcome :: ========");
+            System.out.println("[+]. Choice One Option Below :");
+            System.out.println("[1]. Create Client");
+            System.out.println("[2]. View Client");
+            System.out.println("[3]. Transfers Service");
+            System.out.println("[4]. History Transfer");
+            System.out.println("[5]. Exit");
+            System.out.println("================================");
             System.out.print("Enter your choice: ");
+
             Scanner sc = new Scanner(System.in);
-            int choice = sc.nextInt();
+            int choice = 0;
+            try {
+                try {
+                    choice = sc.nextInt();
+                } catch (InputMismatchException e) {
+                    System.err.println("Please enter Only Number");
+                }
 
-            switch (choice) {
-                case 1:
-                    initializeClient();
-                    viewClient();
+                switch (choice) {
+                    case 1:
+                        initializeClient();
+                        viewClient();
+                        break;
+                    case 2:
+                        viewClient();
+                        break;
+                    case 3:
+                        transfers();
+                        viewClient();
+                        break;
+                    case 4:
+                        viewHistoryClient();
+                        break;
+                    case 5:
+                        System.out.println("Exit");
+                        break;
+                    default:
+                        System.out.println("Invalid choice");
+                        break;
+                }
+
+                if (choice == 5) {
+                    System.out.println("Application Exit");
                     break;
-                case 2:
-                    viewClient();
-                    break;
-                case 3:
-                    transfers();
-                    break;
-                case 4:
-                    viewHistoryClient();
-                    break;
-                case 5:
-                    System.out.println("Exit");
-                    break;
-                default:
-                    System.out.println("Invalid choice");
-                    break;
+                }
+            } catch (Exception e) {
+//                System.out.println(e.getMessage());
             }
 
-            if (choice == 5) {
-                System.out.println("Application Exit");
-                break;
-            }
+
         }
 
     }
 
     public static void initializeClient() {
-        Scanner sc = new Scanner(System.in);
+        try {
+            Scanner sc = new Scanner(System.in);
 
-        System.out.print("Enter Client Name: ");
-        String clientName = sc.nextLine();
+            System.out.print("Enter Client Name [ Enter as String ]: ");
+            String clientName = sc.nextLine();
 
-        System.out.print("Enter Phone Number: ");
-        String phoneNumber = sc.nextLine();
+            System.out.print("Enter Phone Number [ Enter as String ]: ");
+            String phoneNumber = sc.nextLine();
 
-        System.out.print("Enter Email: ");
-        String email = sc.nextLine();
+            System.out.print("Enter Email [ Enter as String ]: ");
+            String email = sc.nextLine();
 
-        System.out.print("Enter Pin Code: ");
-        Integer pinCode = sc.nextInt();
+            System.out.print("Enter Pin Code [ Enter as Number 4 digit ]: ");
+            Integer pinCode = sc.nextInt();
 
-        System.out.print("Enter Save Money: ");
-        Double saveMoney = sc.nextDouble();
+            System.out.print("Enter Save Money [ Enter as Number]: ");
+            Double saveMoney = sc.nextDouble();
 
-        Users user = new Users(clientName, phoneNumber, email, pinCode, saveMoney);
-        RecodeClientPostMoney.users.add(user);
+            Users user = new Users(clientName, phoneNumber, email, pinCode, saveMoney);
+            RecodeClientPostMoney.users.add(user);
+        } catch (InputMismatchException e) {
+            System.out.println(e.getMessage());
+        }
+
     }
     public static void viewHistoryClient() {
         String header = "";
@@ -108,7 +131,7 @@ public class Main {
 
         System.out.println(formatDiv("g------------h------------h--------------h---------------h------------h------------i"));
     }
-    public static void transfers () {
+    public static void transfers () throws AWTException {
         Scanner scanner = new Scanner(System.in);
 
         System.out.print("Enter Client Name Post: ");
@@ -140,8 +163,7 @@ public class Main {
                 .replace('-', '\u2500');
     }
 
-    public static void main(String[] args) {
-        System.out.println(" ========= :: Welcome :: ========");
+    public static void main(String[] args) throws AWTException {
         RecodeClientPostMoney recodeClientPostMoney = new  RecodeClientPostMoney();
         chooseMenu ();
     }
